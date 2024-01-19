@@ -5,8 +5,12 @@ from django.core.exceptions import ValidationError
 from django.forms.fields import EmailField  
 from django.forms.forms import Form  
 
-class CustomUserCreationForm(UserCreationForm):
-  username = forms.CharField(label='username', min_length=5, max_length=150)
+class register_form(UserCreationForm):
   email = forms.EmailField(label='email')
   password1 = forms.CharField(label='password1', widget=forms.PasswordInput)
   password2 = forms.CharField(label='Comfirm Password', widget=forms.PasswordInput)
+  class Meta():
+    model = User
+    fields = ('email','password1', 'password2')
+
+
