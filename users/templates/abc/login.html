@@ -1,0 +1,20 @@
+{% comment %} {% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <form method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+	  <button type="submit" class="btn btn-success">signin</button>
+    </form>
+{% endblock %}   {% endcomment %}
+
+<h1>Login</h1>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+      <a href="{% url 'users:register' %}">Don't have an account</a>  
+</form>

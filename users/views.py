@@ -1,55 +1,42 @@
 from django.shortcuts import render, redirect
 from .forms import register_form
+from .forms import login_form
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.hashers import make_password
 
 
-
-
-# Create your views here.
-# def register(response):
-#     if response.method == "POST":
-#       form = RegisterForm(response.POST)
-#       if form.is_valid():
-#         form.save()
-#         return redirect("/home")
-#     else:
-#       form = RegisterForm()
-#     return render(response, "abc/register.html", {"form":form})
 
 def home(request):
-  return render(request,'templates/home.html' )
+  return render(request,'abc/home.html' )
 
 
 def register_view(request):
     if request.method == "POST":
       form = register_form(request.POST)
       if form.is_valid():
-        email = form.cleaned_data.get('email')
-        password = form.cleaned_data.get('password')
-        messages.success(request,f'your account has been created successfully! you are able to login')
-        return "Heyyy"
+        form.save()
+        messages.success(request,f'YAY')
+        return redirect('users:login')
     else:
         form = register_form()
     return render(request,"abc/register.html",{"form":form})
   
+def login_view(request):
+  if request.method == "POST":
+    form = login_form(request.POST)
+    if form.is_valid():
+      username = form.cleaned_data['username']
+      password = form.cleaned_data['password']
+      user = authenticate(request, username=username, password=password)
+      if user:
+        login(request,user)
+        return redirect('users:home')
+  else:
+    form = login_form()
+  return render(request,"abc/login.html", {"form":form})
 
-# if not request.user.is_authenticated:
-#         if request.method == 'POST':
-#             form = register_form(request.POST)
-#             if form.is_valid():
-#                 username = models.cleaned_data['username']
-#                 password = models.cleaned_data['password']
-#                 user = authenticate(username=username , password=password)
-#                 if user is not None:
-#                     login(request , user)
-#                     messages.success(request,'logged in Successfully !!')
-#                     return redirect('dashbord')
-#                 else:
-#                     form = LoginForm() 
-#         else:
-#             return HttpResponseRedirect('dashbord')
-#     else:
-#         form = LoginForm()
-#     return render(request,'login.html',{'form':form})
-  
+
+def user_logout_view(request):
+  logout(request)
+  return redirect('users:login')

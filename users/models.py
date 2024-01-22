@@ -3,13 +3,7 @@
 # from django.contrib.auth.models import User
 
 
-# class RegisterForm(UserCreationForm):
-#     email = forms.EmailField()
-#     # username = forms.EmailField(max_length=50, required=False)
 
-#     class Meta:
-#       model = User
-#       fields = ["email", "password1", "password2"]
 
 
 from django.db import models
@@ -17,14 +11,21 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class RegisterForm(models.Model):
+    username = models.CharField(max_length=50)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
     email = models.EmailField()
     password = models.CharField(max_length=50)
+    # birth_date = models.DateField(blank=True, null=True)
+
 
 
     def __str__(self):
        return self.email
   
-  
+class LoginForm(models.Model):
+  username = models.CharField(max_length=50)
+  password = models.CharField(max_length=50)
   # title = models.CharField(max_length=3, choices=TITLE_CHOICES)
   # birth_date = models.DateField(blank=True, null=True)
   # email = models.EmailField(max_length=70,blank=True)
